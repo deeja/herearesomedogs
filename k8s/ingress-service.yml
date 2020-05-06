@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-server-cluster-ip
+  annotations:
+    # use the shared ingress-nginx
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: k8s.localhost
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: client-app-cluster-ip
+              servicePort: 80
+    - host: console.k8s.localhost
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: graphql-cluster-ip
+              servicePort: 8080

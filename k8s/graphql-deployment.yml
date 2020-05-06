@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graphql-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: graphql
+  template:
+    metadata:
+      name: graphql
+      labels:
+        component: graphql
+    spec:
+      containers:
+        - name: hasura-graphql
+          image: hasura/graphql-engine
+          ports:
+            - containerPort: 8080
+          env:
+            - name: HASURA_GRAPHQL_DATABASE_URL
+              value: postgres://postgres:somepostgresspassword@database-cluster-ip:5432/postgres
+            - name: HASURA_GRAPHQL_ENABLE_CONSOLE
+              value: "true"
+            - name: HASURA_GRAPHQL_ADMIN_SECRET
+              value: somesecretkey

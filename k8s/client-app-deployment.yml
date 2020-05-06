@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: web
+  template:
+    metadata:
+      name: client-app
+      labels:
+        component: web
+    spec:
+      containers:
+        - name: client-app
+          image: pushsign/herearesomedogs
+          ports:
+            - containerPort: 80
+            

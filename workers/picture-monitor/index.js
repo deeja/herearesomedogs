@@ -15,7 +15,7 @@ const main = async () => {
   const imageList = getBreedImageListFromJson(json);
   //console.log(imageList);
   console.log("Updating database");
-  updateDatabase(imageList);
+  await updateDatabase(imageList);
   console.log(`database updated (${imageList.length})`);
 };
 

@@ -13,36 +13,37 @@
 const Sequelize = require("sequelize");
 const Keys = require("./keys");
 
-const {getModels} = require("./models/index")
+const { getModels } = require("./models/index");
 
 const sequelize = new Sequelize(Keys.PGDATABASE, Keys.PGUSER, Keys.PGPASSWORD, {
   host: Keys.PGHOST,
   dialect: "postgres",
 });
 
-const updateDatabase = async () => {
+const updateDatabase = async (imageList) => {
   await sequelize
-  .authenticate()
-  .then(() => {
-    console.log("Connection has been established successfully.");
-  })
-  .catch((err) => {
-    console.error("Unable to connect to the database:", err);
-  });
+    .authenticate()
+    .then(() => {
+      console.log("Connection has been established successfully.");
+    })
+    .catch((err) => {
+      console.error("Unable to connect to the database:", err);
+    });
 
   const models = getModels(sequelize);
-  
-  console.log(models)
 
-  return models.BreedImage.sync({ force: true }).then(() => {
-    // Now the `users` table in the database corresponds to the model definition
-    return models.BreedImage.create({
-      breed: "--Something",
-      image:"--ONE OF THESE.JPG"
-    });
+  await sequelize.sync();
+
+  console.log("Models available:", sequelize.models);
+
+  await models.Breed.create({
+    name: "poodle",
   });
 
-
+  await models.BreedImage.create({
+    breed_id: 1,
+    image_src: "--ONE OF THESE.JPG",
+  });
 };
 
 module.exports = { updateDatabase };

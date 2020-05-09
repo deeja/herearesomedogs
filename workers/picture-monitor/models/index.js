@@ -1,18 +1,21 @@
-const breedImageModelDefinition = require("./BreedImage");
-
 function getModels(sequelize) {
-  return {
-    [breedImageModelDefinition.name]: modelFactory(sequelize, breedImageModelDefinition),
-  };
+  const models = [require("./Breed"), require("./BreedImage")];
+  const result = {};
+
+  for (const model of models) {    
+    result[model.name] = modelFactory(sequelize, model);    
+  }
+
+  return result;
 }
 
-const modelFactory = (sequelize, modelDefinition) => {
+const modelFactory = (sequelize, model) => {
   const customModel = sequelize.define(
-    modelDefinition.name,
-    modelDefinition.schema,
+    model.name,
+    model.schemaBuilder(sequelize),
     {
       sequelize,
-      modelName: modelDefinition.table,
+      modelName: model.name,
     }
   );
   return customModel;

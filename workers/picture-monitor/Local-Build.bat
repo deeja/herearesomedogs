@@ -1,0 +1,1 @@
+docker build . -t pushsign/hasd-worker:local

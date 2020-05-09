@@ -1,0 +1,19 @@
+version: "3.1"
+services:
+  worker:
+    image: pushsign/hasd-worker:local
+    restart: "no"
+    command: "node index.js"
+  db:
+    image: pushsign/hasd-db:local
+    restart: always
+    expose:
+      - "5432"
+    volumes:
+      - "hasd_db_data:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      PGDATA: "/var/lib/postgresql/data"
+volumes:
+  hasd_db_data:
+    driver: local

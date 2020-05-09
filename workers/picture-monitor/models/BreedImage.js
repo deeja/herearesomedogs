@@ -1,20 +1,16 @@
-const { Model, DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
 
-class BreedImage extends Model {}
-
-module.exports = (sequelize) => {
-  BreedImage.init(
-    {
-      breed: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      image: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+module.exports = {
+  name: "BreedImage",
+  table: "breed_image",
+  schema: {
+    breed: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-    { sequelize, modelName: "breed_image" }
-  );
-  return BreedImage;
+    image: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  },
 };

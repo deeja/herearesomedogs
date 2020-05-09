@@ -3,7 +3,7 @@ const axios = require("axios");
 
 jest.mock("axios");
 
-const { getBreedImageListFromJson, downloadBreedImageJson } = require("./dog");
+const { getBreedImageListFromJson, downloadBreedImageJson } = require("../dog");
 
 const dogResponseExample = () => fs.readFileSync("example.json", "utf8");
 

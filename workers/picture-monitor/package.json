@@ -4,12 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --colors"
+    "start": "node index.js",
+    "test": "jest --colors --setupFiles dotenv/config"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.2"
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "pg": "^8.0.3",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^5.21.7"
   },
   "devDependencies": {
     "jest": "^26.0.1"

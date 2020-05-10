@@ -1,25 +1,24 @@
 function getModels(sequelize) {
-  const models = [
+  const modelDefinitions = [
     require("./Update.js"),
     require("./Breed"),
     require("./BreedImage"),
   ];
-  const result = {};
+  const models = {};
 
-  // build models
-  for (const model of models) {
-    result[model.name] = modelFactory(sequelize, model);
+  console.log("Creating models")
+  for (const definition of modelDefinitions) {
+    models[definition.name] = modelFactory(sequelize, definition);
   }
 
-  // set relationships
-  for (const key in result) {
-    const model = result[key];
-    if (model.setRelationships) {
-      model.setRelationships(result[key], result); 
+  console.log("Set relationships")
+  for (const definition of modelDefinitions) {
+    if (definition.setRelationships) {
+      definition.setRelationships(models); 
     }
   }
 
-  return result;
+  return models;
 }
 
 const modelFactory = (sequelize, model) => {

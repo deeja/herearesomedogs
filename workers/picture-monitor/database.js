@@ -13,8 +13,8 @@ const getSequelizeClient = async () => {
       dialect: "postgres",
     }
   );
-
-  await sequelize.authenticate();
+  console.log("Authenticating with DB");
+  await sequelize.authenticate()
   console.log("Connection has been established successfully.");
   ModelFactory.getModels(sequelize);
   await sequelize.sync();
@@ -50,8 +50,7 @@ const updateShaToken = (transaction, models, shaToken) => {
 
 const clearBreedsAndImages = async (transaction, models) => {
   console.log("Clearing all previous Breeds and Breed Images");
-  const all = { truncate: true, transaction };
-  await models.BreedImage.destroy(all);
+  const all = { where: { id: { [Sequelize.Op.ne]: 0 } }, transaction };
   await models.Breed.destroy(all);
 };
 

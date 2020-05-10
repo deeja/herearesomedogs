@@ -5,16 +5,14 @@ module.exports = {
   name: "BreedImage",
   schemaBuilder: (sequelize) => ({
     breed_id: {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
     },
     image: {
       type: DataTypes.STRING,
       allowNull: false,
     },
   }),
-  setRelationships: (currentModel, models) => {
-    const breedModel = models[breed.name];
-    currentModel.belongsTo(breedModel);
-    breedModel.hasMany(currentModel);
+  setRelationships: (models) => {
+    models.Breed.hasMany(models.BreedImage);
   },
 };

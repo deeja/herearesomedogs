@@ -21,7 +21,7 @@ const main = async () => {
     );
   }
 
-  const hasUpdateEntry = await Database.hasUpdateEntry(json.sha)
+  const hasUpdateEntry = await Database.hasUpdateEntry(json.sha);
   if (hasUpdateEntry) {
     console.log("Update SHA was found in DB. No updates needed.", json.sha);
     return;
@@ -33,4 +33,7 @@ const main = async () => {
   await Database.updateDatabase(imageList, json.sha);
 };
 
-main();
+main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: client-app
-          image: pushsign/herearesomedogs
+          image: pushsign/hasd-webapp
           ports:
             - containerPort: 80
             

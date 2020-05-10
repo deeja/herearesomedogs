@@ -20,7 +20,7 @@ spec:
             - containerPort: 8080
           env:
             - name: HASURA_GRAPHQL_DATABASE_URL
-              value: postgres://postgres:somepostgresspassword@database-cluster-ip:5432/postgres
+              value: postgres://postgres:somepostgresspassword@database-cluster-ip:5432/herearesomedogs
             - name: HASURA_GRAPHQL_ENABLE_CONSOLE
               value: "true"
             - name: HASURA_GRAPHQL_ADMIN_SECRET

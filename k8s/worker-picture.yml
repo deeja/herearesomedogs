@@ -1,0 +1,27 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: worker
+spec:
+  schedule: "30 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: worker-picture
+              image: pushsign/hasd-worker-picture-monitor
+              env:
+               - name: PGUSER
+                 value : postgres
+               - name:  PGHOST
+                 value: database-cluster-ip
+               - name: PGPASSWORD
+                 value : somepostgresspassword
+               - name: PGDATABASE
+                 value: herearesomedogs
+               - name: PGPORT
+                 value: "5432"
+               - name: GIT_TREE_URL
+                 value: https://api.github.com/repos/deeja/dog-api-images/git/trees/master?recursive=1
+          restartPolicy: OnFailure

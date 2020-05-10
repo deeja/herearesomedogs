@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { getBreedImageListFromJson, downloadBreedImageJson } = require("./dog");
-const { updateDatabase } = require("./database");
+const database = require("./database");
 
 const url =
   "https://api.github.com/repos/deeja/dog-api-images/git/trees/master?recursive=1";
@@ -13,10 +13,9 @@ const main = async () => {
   const json = await downloadBreedImageJson(url);
   console.log("Finished downloading JSON", url);
   const imageList = getBreedImageListFromJson(json);
-  //console.log(imageList);
   console.log("Updating database");
-  await updateDatabase(imageList);
-  console.log(`database updated (${imageList.length})`);
+
+  await database.updateDatabase(imageList);
 };
 
 console.log("Starting");

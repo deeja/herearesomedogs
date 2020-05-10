@@ -7,5 +7,5 @@ module.exports = {
       type: DataTypes.STRING,
       allowNull: false,
     },
-  }),
+  })
 };

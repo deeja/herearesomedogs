@@ -1,19 +1,21 @@
 function getModels(sequelize) {
-  const models = [require("./Breed"), require("./BreedImage")];
+  const models = [
+    require("./Update.js"),
+    require("./Breed"),
+    require("./BreedImage"),
+  ];
   const result = {};
 
   // build models
   for (const model of models) {
-    console.log("Creating model: ", model)
     result[model.name] = modelFactory(sequelize, model);
-
   }
 
   // set relationships
   for (const key in result) {
     const model = result[key];
     if (model.setRelationships) {
-      model.setRelationships(result[key], result); // TODO Call this? 
+      model.setRelationships(result[key], result); 
     }
   }
 

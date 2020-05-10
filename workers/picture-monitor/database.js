@@ -21,16 +21,31 @@ const getSequelizeClient = async () => {
   return sequelize;
 };
 
-const updateDatabase = async (breeds) => {
+const hasUpdateEntry = async (shaToken) => {
+  const sequelize = await getSequelizeClient();
+  const entry = await sequelize.models.Update.findAll({
+    where: {
+      sha: shaToken,
+    },
+  });
+  return entry.length > 0;
+};
+
+const updateDatabase = async (breeds, shaToken) => {
   const sequelize = await getSequelizeClient();
   const models = sequelize.models;
   await sequelize.transaction(async (t) => {
     console.log("Starting update transaction");
-    await clearBreedsAndImages(t,models);
+    await clearBreedsAndImages(t, models);
     await updateBreedImages(t, models, breeds);
+    await updateShaToken(t, models, shaToken);
     console.log("Finished update - Committing transaction");
   });
-  console.log("Data committed - Update complete")
+  console.log("Data committed - Update complete");
+};
+
+const updateShaToken = (transaction, models, shaToken) => {
+  return models.Update.create({ sha: shaToken }, { transaction });
 };
 
 const clearBreedsAndImages = async (transaction, models) => {
@@ -86,4 +101,5 @@ module.exports = {
   getBreeds,
   createCreatedBreedLookup,
   buildImageEntryList,
+  hasUpdateEntry,
 };

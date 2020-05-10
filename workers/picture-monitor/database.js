@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const Keys = require("./keys");
 const ModelFactory = require("./models/index");
 
-const getSequelizeClient = () => {
+const getSequelizeClient = async () => {
   const sequelize = new Sequelize(
     Keys.PGDATABASE,
     Keys.PGUSER,
@@ -14,19 +14,10 @@ const getSequelizeClient = () => {
     }
   );
 
-  sequelize
-    .authenticate()
-    .then(() => {
-      ModelFactory.getModels(sequelize);
-      sequelize.sync();
-    })
-    .then(() => {
-      console.log("Connection has been established successfully.");
-    })
-    .catch((err) => {
-      console.error("Unable to connect to the database:", err);
-    });
-
+  await sequelize.authenticate();
+  console.log("Connection has been established successfully.");
+  const models = ModelFactory.getModels(sequelize);
+  await sequelize.sync();
   return sequelize;
 };
 
@@ -34,8 +25,15 @@ const updateDatabase = async (breeds) => {
   const sequelize = await getSequelizeClient();
   const models = sequelize.models;
   await sequelize.transaction(async (t) => {
-    updateBreedImages(models, breeds);
+    await clearBreedsAndImages(models);
+    await updateBreedImages(models, breeds);
   });
+};
+
+const clearBreedsAndImages = async (models) => {
+  const all = { where :  Sequelize.literal('1=1')};
+  await models.BreedImage.destroy(all);
+  await models.Breed.destroy(all);
 };
 
 const updateBreedImages = async (models, breeds) => {

@@ -16,7 +16,7 @@ const getSequelizeClient = async () => {
 
   await sequelize.authenticate();
   console.log("Connection has been established successfully.");
-  const models = ModelFactory.getModels(sequelize);
+  ModelFactory.getModels(sequelize);
   await sequelize.sync();
   return sequelize;
 };
@@ -25,24 +25,30 @@ const updateDatabase = async (breeds) => {
   const sequelize = await getSequelizeClient();
   const models = sequelize.models;
   await sequelize.transaction(async (t) => {
-    await clearBreedsAndImages(models);
-    await updateBreedImages(models, breeds);
+    console.log("Starting update transaction");
+    await clearBreedsAndImages(t,models);
+    await updateBreedImages(t, models, breeds);
+    console.log("Finished update - Committing transaction");
   });
+  console.log("Data committed - Update complete")
 };
 
-const clearBreedsAndImages = async (models) => {
-  const all = { where :  Sequelize.literal('1=1')};
+const clearBreedsAndImages = async (transaction, models) => {
+  console.log("Clearing all previous Breeds and Breed Images");
+  const all = { truncate: true, transaction };
   await models.BreedImage.destroy(all);
   await models.Breed.destroy(all);
 };
 
-const updateBreedImages = async (models, breeds) => {
+const updateBreedImages = async (transaction, models, breeds) => {
   const breedKeys = Object.keys(breeds).map((name) => ({ name }));
-  const result = await models.Breed.bulkCreate(breedKeys);
+  const result = await models.Breed.bulkCreate(breedKeys, { transaction });
   console.log("Added Breeds:", result.length);
   const lookup = createCreatedBreedLookup(result);
   const breedImages = buildImageEntryList(breeds, lookup);
-  const createdImages = await models.BreedImage.bulkCreate(breedImages);
+  const createdImages = await models.BreedImage.bulkCreate(breedImages, {
+    transaction,
+  });
   console.log("Added images: ", createdImages.length);
 };
 

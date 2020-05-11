@@ -1,0 +1,30 @@
+# Use postgres/example user/password credentials
+version: "3.1"
+services:
+  db:
+    image: pushsign/hasd-db:local
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - "hasd_db_data:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      PGDATA: "/var/lib/postgresql/data"
+  graphql-initialise:
+    image: pushsign/hasd-graphql:local
+    restart: on-failure
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@db:5432/herearesomedogs
+  graphql-server:
+    image: hasura/graphql-engine:latest
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgres@db:5432/herearesomedogs
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ADMIN_SECRET: somesecretkey
+volumes:
+  hasd_db_data:
+    external: true

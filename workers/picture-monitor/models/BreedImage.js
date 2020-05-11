@@ -1,18 +1,20 @@
 const { DataTypes } = require("sequelize");
-const breed = require("./Breed");
+const breedDefinition = require("./Breed");
+
+
 
 module.exports = {
   name: "BreedImage",
   schemaBuilder: (sequelize) => ({
-    breed_id: {
-      type: DataTypes.INTEGER,
-    },
     image: {
       type: DataTypes.STRING,
       allowNull: false,
     },
   }),
-  setRelationships: (models) => {
-    models.Breed.hasMany(models.BreedImage);
+  setRelationships: function(models) {
+    models[breedDefinition.name].hasMany(models.BreedImage, {foreignKey: this.foreignKeys.breed});
   },
+  foreignKeys:{
+    breed: 'fk_breed_id'
+  }
 };

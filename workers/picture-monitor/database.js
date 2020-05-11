@@ -2,6 +2,8 @@ const Sequelize = require("sequelize");
 const Keys = require("./keys");
 const ModelFactory = require("./models/index");
 
+const breedImageDefinition = require("./models/BreedImage")
+
 const getSequelizeClient = async () => {
   const sequelize = new Sequelize(
     Keys.PGDATABASE,
@@ -87,7 +89,7 @@ const buildImageEntryList = (breedList, breedLookup) => {
     const breedId = breedLookup[breedKey];
 
     for (const image of breedImages) {
-      images.push({ breed_id: breedId, image });
+      images.push({ [breedImageDefinition.foreignKeys.breed]: breedId, image });
     }
   }
 

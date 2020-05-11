@@ -1,0 +1,1 @@
+call docker build . -t pushsign/hasd-webapp:local

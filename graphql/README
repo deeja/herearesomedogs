@@ -1,0 +1,10 @@
+Tables and configuration are set in the database. 
+Exporting these means they will be persisted. 
+
+https://hasura.io/docs/1.0/graphql/manual/migrations/reference/how-it-works.html
+
+- Download the hasura cli tool and copy it to a working folder
+- Open CMD as Administrator
+- `cli-hasura-windows-amd64.exe init`
+- `cd hasura`
+- `..\cli-hasura-windows-amd64.exe metadata export --admin-secret somesecretkey`

@@ -1,0 +1,21 @@
+- table:
+    schema: public
+    name: BreedImages
+  object_relationships:
+  - name: Breed
+    using:
+      foreign_key_constraint_on: fk_breed_id
+- table:
+    schema: public
+    name: Breeds
+  array_relationships:
+  - name: BreedImages
+    using:
+      foreign_key_constraint_on:
+        column: fk_breed_id
+        table:
+          schema: public
+          name: BreedImages
+- table:
+    schema: public
+    name: Updates
